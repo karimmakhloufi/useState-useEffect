@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function App() {
+  const [quote, setQuote] = useState({});
+  const [date, setDate] = useState(new Date());
+  console.log("render");
+  const getAndDisplayQuote = () => {
+    axios
+      .get("https://thesimpsonsquoteapi.glitch.me/quotes")
+      .then((data) => setQuote(data.data[0]));
+  };
+  useEffect(getAndDisplayQuote, [date]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>{date.toISOString()}</p>
+      <button onClick={() => setDate(new Date())}>Update Date</button>
+      <p>{quote.character}</p>
+      <img src={quote.image} />
     </div>
   );
 }
